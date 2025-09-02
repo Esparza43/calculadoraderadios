@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadGauge - Calculadora de Radio</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #ef4444;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+            --gray: #6b7280;
+            --success: #10b981;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2 i {
+            font-size: 1.3rem;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        .radio-group {
+            margin: 15px 0;
+        }
+        
+        .radio-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        
+        .radio-label input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #dc2626;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .result-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            background: var(--light);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+            color: var(--primary);
+        }
+        
+        .warn {
+            display: none;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Calculadora de Radios</h1>
+            <p class="subtitle">Por MadmanHouse - Funciona offline</p>
+        </header>
+        
+        <div class="card">
+            <h2><i>📱</i> Calculadora de Radio</h2>
+            
+            <div class="form-group">
+                <label for="variant">Abertura del RadGauge (W)</label>
+                <select id="variant">
+                    <option value="60">Default 60 mm</option>
+                    <option value="30">Small 30 mm</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="measured">Lectura de la sonda de profundidad</label>
+                <input id="measured" type="text" placeholder="p. ej., 12,07" inputmode="decimal" />
+                <div style="color: var(--gray); font-size: 13px; margin-top: 5px;">Admite coma o punto (ej. 12,07 · 12.07)</div>
+            </div>
+            
+            <div class="radio-group">
+                <label>Desplazamiento (offset)</label>
+                <div class="radio-label">
+                    <input type="radio" name="offset" id="off20" value="20" checked>
+                    <label for="off20" style="display: inline;">20 mm (por defecto)</label>
+                </div>
+                <div class="radio-label">
+                    <input type="radio" name="offset" id="off0" value="0">
+                    <label for="off0" style="display: inline;">0 (calibrador puesto a cero)</label>
+                </div>
+                <div class="radio-label">
+                    <input type="radio" name="offset" id="offcustom" value="custom">
+                    <label for="offcustom" style="display: inline; margin-right: 6px;">Personalizado</label>
+                    <input id="custom" type="text" placeholder="ej. 19,52" inputmode="decimal" style="max-width:200px" disabled>
+                </div>
+            </div>
+            
+            <div>
+                <button id="calc" class="btn">Calcular</button>
+                <button id="copy" class="btn btn-secondary">Copiar resultado</button>
+                <span class="badge" id="hinfo">H = —</span>
+            </div>
+            
+            <div id="warning" class="warn"></div>
+            
+            <div class="result">
+                <div>Radio calculado:</div>
+                <div class="result-value" id="result">—</div>
+                <div>mm</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Fórmula: <strong>R = H/2 + W²/(8·H)</strong>.</p>
+            <p>Si no pones a cero el calibrador: <strong>H = |offset − lectura|</strong>.</p>
+            <p>Con calibrador a cero: <strong>H = lectura</strong>.</p>
+            <p>© 2023 - Rad Gauge Calculator</p>
+        </footer>
+    </div>
+
+    <script>
+        function toNumber(v){
+            if(typeof v!=="string") return NaN;
+            v=v.trim().replace(",",".");
+            const n=parseFloat(v);
+            return Number.isFinite(n)?n:NaN;
+        }
+        function radiusFromArc(H,W){return H/2+(W*W)/(8*H);}
+
+        const $variant=document.getElementById("variant");
+        const $measured=document.getElementById("measured");
+        const $off20=document.getElementById("off20");
+        const $off0=document.getElementById("off0");
+        const $offcustom=document.getElementById("offcustom");
+        const $custom=document.getElementById("custom");
+        const $calc=document.getElementById("calc");
+        const $copy=document.getElementById("copy");
+        const $res=document.getElementById("result");
+        const $hinfo=document.getElementById("hinfo");
+        const $warning=document.getElementById("warning");
+
+        function syncCustom(){
+            $custom.disabled=!$offcustom.checked;
+            if(!$offcustom.checked) $custom.value="";
+        }
+        document.querySelectorAll("input[name='offset']").forEach(r=>r.addEventListener("change",syncCustom));
+        syncCustom();
+
+        function compute(){
+            const W=parseInt($variant.value,10);
+            const m=toNumber($measured.value);
+            if(!Number.isFinite(m)){
+                $res.textContent="—";$hinfo.textContent="H = —";
+                $warning.style.display="block";$warning.textContent="Introduce una lectura válida.";
+                return;
+            }
+            let H;
+            if($off0.checked){H=Math.abs(m);}
+            else if($offcustom.checked){
+                const c=toNumber($custom.value);
+                if(!Number.isFinite(c)){
+                    $warning.style.display="block";$warning.textContent="Offset personalizado inválido.";
+                    $res.textContent="—";$hinfo.textContent="H = —";return;
+                }
+                H=Math.abs(c-m);
+            } else {H=Math.abs(20-m);}
+            if(H===0){
+                $warning.style.display="block";$warning.textContent="H=0 → Radio teórico infinito.";
+                $res.textContent="∞";$hinfo.textContent="H = 0 mm";return;
+            }
+            $warning.style.display="none";
+            const R=radiusFromArc(H,W);
+            $res.textContent=R.toFixed(2);
+            $hinfo.textContent="H = "+H.toFixed(3)+" mm";
+        }
+        $calc.addEventListener("click",compute);
+
+        $copy.addEventListener("click",()=>{
+            const txt=$res.textContent+" mm";
+            navigator.clipboard.writeText(txt).then(() => {
+                const originalText = $copy.textContent;
+                $copy.textContent = "¡Copiado!";
+                setTimeout(() => {
+                    $copy.textContent = originalText;
+                }, 2000);
+            }).catch(()=>{});
+        });
+    </script>
+</body>
+</html>
